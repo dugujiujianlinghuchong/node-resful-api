@@ -26,11 +26,6 @@ mongoose.connect(db)
     console.log("连接失败");
   })
 
-// 垃圾
-// app.get("/test", (req, res) => {
-//   res.send("hello world");
-// })
-
 // 使用routes
 app.use("/api/users", users);
 
