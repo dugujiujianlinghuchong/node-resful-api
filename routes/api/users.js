@@ -6,6 +6,9 @@ const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
+// 引入验证方法
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 
 router.get("/test", (req, res) => {
   res.json({ mag: 'login works' });
@@ -17,6 +20,12 @@ router.get("/test", (req, res) => {
 * @access public
 */
 router.post("/register", (req, res) => {
+  // 注册验证
+  const { errors, isValid } = validateRegisterInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   // 查询数据库中是否已存在邮箱
   User.findOne({ email: req.body.email })
     .then(user => {
@@ -56,6 +65,12 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+
+  // 登录验证
+  const { errors, isValid } = validateLoginInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
 
   // 查询数据库
   User.findOne({ email })
