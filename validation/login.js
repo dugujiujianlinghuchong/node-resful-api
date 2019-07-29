@@ -1,7 +1,6 @@
 /* 
 *   登录验证
 */
-
 const Validator = require("validator");
 const isEmpty = require("./is-empty");
 

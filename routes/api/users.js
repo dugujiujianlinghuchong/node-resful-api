@@ -10,9 +10,6 @@ const passport = require("passport");
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 
-router.get("/test", (req, res) => {
-  res.json({ mag: 'login works' });
-})
 
 /* 
 * $route  POST api/users/register
@@ -57,6 +54,7 @@ router.post("/register", (req, res) => {
     })
 })
 
+
 /* 
 * $route  POST api/users/login
 * @desc   用户登录 返回token jwt passport
@@ -88,7 +86,7 @@ router.post("/login", (req, res) => {
               name: user.name,
             }
 
-            // 返回token
+            // 返回登录口令
             jwt.sign(rule, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
               if (err) throw err
               res.json({
@@ -96,7 +94,6 @@ router.post("/login", (req, res) => {
                 token: `Bearer ${token}`
               })
             })
-            // res.json({msg: "登录成功！"});
           } else {
             return res.status(400).json({ password: "密码错误！" })
           }
@@ -104,9 +101,10 @@ router.post("/login", (req, res) => {
     })
 })
 
+
 /* 
 * $route  POST api/users/current
-* @desc   return current user
+* @desc   返回当前登陆的用户信息
 * @access Private
 */
 router.get("/current", passport.authenticate("jwt", { session: false }), (req, res) => {
